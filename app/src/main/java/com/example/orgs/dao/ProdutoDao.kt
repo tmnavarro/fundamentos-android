@@ -1,6 +1,7 @@
 package com.example.orgs.dao
 
 import com.example.orgs.model.Produto
+import java.math.BigDecimal
 
 class ProdutoDao {
 
@@ -8,12 +9,17 @@ class ProdutoDao {
         Companion.produtos.add(produto)
     }
 
-    fun buscaTodosProdutos(): List<Produto>
-    {
+    fun buscaTodosProdutos(): List<Produto> {
         return Companion.produtos.toList()
     }
 
     companion object {
-        private val produtos = mutableListOf<Produto>()
+        private val produtos = mutableListOf<Produto>(
+            Produto(
+                titulo = "Meu produto",
+                descricao = "A descrição que eu quiser",
+                valor = BigDecimal("16.89")
+            )
+        )
     }
 }
