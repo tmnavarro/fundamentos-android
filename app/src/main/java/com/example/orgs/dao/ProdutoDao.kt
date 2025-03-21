@@ -5,6 +5,8 @@ import java.math.BigDecimal
 
 class ProdutoDao {
 
+    // Teste
+
     fun adiciona(produto: Produto) {
         Companion.produtos.add(produto)
     }
