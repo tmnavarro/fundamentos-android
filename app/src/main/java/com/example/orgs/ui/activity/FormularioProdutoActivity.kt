@@ -3,11 +3,15 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.orgs.R
+import coil.load
 import com.example.orgs.dao.ProdutoDao
 import com.example.orgs.databinding.ActivityFormularioCadastroProdutosBinding
+import com.example.orgs.databinding.FormularioImagemBinding
 import com.example.orgs.model.Produto
 import java.math.BigDecimal
+import com.example.orgs.R
+import com.example.orgs.extensions.tentaCarregarImagem
+import com.example.orgs.ui.dialog.FormularioImagemDialo
 
 class FormularioProdutoActivity : AppCompatActivity() {
 
@@ -15,20 +19,18 @@ class FormularioProdutoActivity : AppCompatActivity() {
         ActivityFormularioCadastroProdutosBinding.inflate(layoutInflater)
     }
 
+    private var url: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraBotaoSalvar()
         binding.formularioProdutosImageView.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setView(R.layout.formulario_imagem)
-                .setPositiveButton("Confirmar") { _, _ ->
-
-                }
-                .setNegativeButton("Cancelar") { _, _ ->
-
-                }
-                .show()
+           FormularioImagemDialo(this).mostra() {
+               imagem ->
+               url = imagem
+               binding.formularioProdutosImageView.tentaCarregarImagem(url)
+           }
         }
 
     }
@@ -57,6 +59,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
             BigDecimal(valorString)
         }
 
-        return Produto(titulo = titulo, descricao = descricao, valor = valor)
+        return Produto(titulo = titulo, descricao = descricao, valor = valor, imagem = url)
     }
 }

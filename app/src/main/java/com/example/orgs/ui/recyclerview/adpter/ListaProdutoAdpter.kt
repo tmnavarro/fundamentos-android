@@ -2,12 +2,16 @@ package com.example.orgs.ui.recyclerview.adpter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orgs.databinding.ProdutoItemBinding
 import com.example.orgs.model.Produto
 import java.text.NumberFormat
 import java.util.Locale
+import com.example.orgs.R
+import com.example.orgs.extensions.tentaCarregarImagem
 
 class ListaProdutoAdpter(
     private val context: Context,
@@ -25,6 +29,16 @@ class ListaProdutoAdpter(
             val valor = binding.produtoItemValor
             val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             valor.text = format.format(produto.valor)
+
+            val visibilidade = if(produto.imagem != null) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+            binding.imageView.visibility = visibilidade;
+
+            binding.imageView.tentaCarregarImagem(produto.imagem)
         }
     }
 
