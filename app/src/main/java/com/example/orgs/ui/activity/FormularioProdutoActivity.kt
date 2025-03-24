@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.orgs.dao.ProdutoDao
 import com.example.orgs.databinding.ActivityFormularioCadastroProdutosBinding
-import com.example.orgs.databinding.FormularioImagemBinding
 import com.example.orgs.model.Produto
 import java.math.BigDecimal
-import com.example.orgs.R
 import com.example.orgs.extensions.tentaCarregarImagem
 import com.example.orgs.ui.dialog.FormularioImagemDialo
 
@@ -24,6 +22,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        title = "Cadastro de Plantas"
         configuraBotaoSalvar()
         binding.formularioProdutosImageView.setOnClickListener {
            FormularioImagemDialo(this).mostra(url) {

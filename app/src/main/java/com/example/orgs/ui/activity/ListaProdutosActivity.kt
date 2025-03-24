@@ -23,6 +23,7 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        title = "Minhas plantas"
         setContentView(binding.root)
         configBtnNovoProduto()
         configuraRecycleView()
