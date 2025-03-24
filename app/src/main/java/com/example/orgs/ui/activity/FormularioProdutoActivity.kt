@@ -26,7 +26,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraBotaoSalvar()
         binding.formularioProdutosImageView.setOnClickListener {
-           FormularioImagemDialo(this).mostra() {
+           FormularioImagemDialo(this).mostra(url) {
                imagem ->
                url = imagem
                binding.formularioProdutosImageView.tentaCarregarImagem(url)
