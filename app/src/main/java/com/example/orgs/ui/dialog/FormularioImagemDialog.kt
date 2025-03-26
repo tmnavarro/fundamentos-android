@@ -3,7 +3,7 @@ package com.example.orgs.ui.dialog
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import com.example.orgs.databinding.FormularioImagemBinding
+import com.example.orgs.databinding.ActivityFormularioImagemBinding
 import com.example.orgs.extensions.tentaCarregarImagem
 
 class FormularioImagemDialo(val context: Context) {
@@ -12,10 +12,10 @@ class FormularioImagemDialo(val context: Context) {
         urlPadrao: String? = null,
         quandoCarregarImagem: (imagem: String) -> Unit
     ) {
-        FormularioImagemBinding.inflate(LayoutInflater.from(context)).apply {
+        ActivityFormularioImagemBinding.inflate(LayoutInflater.from(context)).apply {
             urlPadrao?.let {
-                formularioImagemImageView.tentaCarregarImagem(urlPadrao)
-                formularioImagemUrl.setText(urlPadrao)
+                formularioImagemImageView.tentaCarregarImagem(it)
+                formularioImagemUrl.setText(it)
             }
             val formularioImagemBotaoCarregar =
                 formularioImagemBotaoCarregar

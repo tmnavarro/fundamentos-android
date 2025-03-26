@@ -1,34 +1,48 @@
 package com.example.orgs.ui.recyclerview.adpter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.example.orgs.databinding.ProdutoItemBinding
+import com.example.orgs.databinding.ActivityProdutoItemBinding
+import com.example.orgs.extensions.formataMoedaPtBr
 import com.example.orgs.model.Produto
 import java.text.NumberFormat
 import java.util.Locale
-import com.example.orgs.R
 import com.example.orgs.extensions.tentaCarregarImagem
 
 class ListaProdutoAdpter(
     private val context: Context,
-    produtos: List<Produto>
+    produtos: List<Produto>,
+    var acessaDetalhesProduto: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutoAdpter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(private val binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ActivityProdutoItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var produto: Produto
+
+        init {
+            itemView.setOnClickListener {
+                Log.i("Adpter", "ON CLICIK")
+                if(::produto.isInitialized) {
+                    acessaDetalhesProduto(produto)
+                }
+            }
+        }
+
         fun vincula(produto: Produto) {
+            this.produto = produto
             val titulo = binding.produtoItemTitulo
             titulo.text = produto.titulo
             val descricao = binding.produtoItemDescricao
             descricao.text = produto.descricao
             val valor = binding.produtoItemValor
-            val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            valor.text = format.format(produto.valor)
+            valor.text = produto.valor.formataMoedaPtBr()
 
             val visibilidade = if(produto.imagem != null) {
                 View.VISIBLE
@@ -44,7 +58,7 @@ class ListaProdutoAdpter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding = ProdutoItemBinding.inflate(inflater, parent, false)
+        val binding = ActivityProdutoItemBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
