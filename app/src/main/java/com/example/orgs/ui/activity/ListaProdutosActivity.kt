@@ -2,16 +2,15 @@ package com.example.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.ui.recyclerview.adpter.ListaProdutoAdpter
-import com.example.orgs.dao.ProdutoDao
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 
 class ListaProdutosActivity : AppCompatActivity() {
-    private val produtoDao = ProdutoDao()
+
     private val adapter =
-        ListaProdutoAdpter(context = this, produtos = produtoDao.buscaTodosProdutos())
+        ListaProdutoAdpter(context = this)
 
     // coloca o nome que quiser usa o shift+F6 para renomear
     // caso necessário
@@ -42,7 +41,11 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.atualiza(produtoDao.buscaTodosProdutos())
+        val db = AppDatabase.getInstance(this)
+
+        val produtoDao = db.produtoDao()
+
+        adapter.atualiza(produtoDao.getAll())
     }
 
     private fun configuraRecycleView() {

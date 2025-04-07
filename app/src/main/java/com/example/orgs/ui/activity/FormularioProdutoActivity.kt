@@ -1,10 +1,8 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import coil.load
-import com.example.orgs.dao.ProdutoDao
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityFormularioCadastroProdutosBinding
 import com.example.orgs.model.Produto
 import java.math.BigDecimal
@@ -25,21 +23,22 @@ class FormularioProdutoActivity : AppCompatActivity() {
         title = "Cadastro de Plantas"
         configuraBotaoSalvar()
         binding.formularioProdutosImageView.setOnClickListener {
-           FormularioImagemDialo(this).mostra(url) {
-               imagem ->
-               url = imagem
-               binding.formularioProdutosImageView.tentaCarregarImagem(url)
-           }
+            FormularioImagemDialo(this).mostra(url) { imagem ->
+                url = imagem
+                binding.formularioProdutosImageView.tentaCarregarImagem(url)
+            }
         }
 
     }
 
     private fun configuraBotaoSalvar() {
         val botaoSalvar = binding.botaoSalvar
-        val produtoDao = ProdutoDao()
-        botaoSalvar.setOnClickListener  {
+        val db = AppDatabase.getInstance(this)
+        val produtoDao = db.produtoDao()
+
+        botaoSalvar.setOnClickListener {
             val novoProduto = criaProduto()
-            produtoDao.adiciona(novoProduto)
+            produtoDao.insert(novoProduto)
             finish()
         }
     }

@@ -15,7 +15,7 @@ import com.example.orgs.extensions.tentaCarregarImagem
 
 class ListaProdutoAdpter(
     private val context: Context,
-    produtos: List<Produto>,
+    produtos: List<Produto> = emptyList(),
     var acessaDetalhesProduto: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutoAdpter.ViewHolder>() {
 
@@ -28,7 +28,6 @@ class ListaProdutoAdpter(
 
         init {
             itemView.setOnClickListener {
-                Log.i("Adpter", "ON CLICIK")
                 if(::produto.isInitialized) {
                     acessaDetalhesProduto(produto)
                 }

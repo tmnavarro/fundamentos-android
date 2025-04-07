@@ -30,8 +30,7 @@
 
         <activity
             android:name=".ui.activity.DetalhesProdutoActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Orgs.NoActionBar"/>
+            android:exported="true"/>
 
         <meta-data
             android:name="preloaded_fonts"
