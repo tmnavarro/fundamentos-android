@@ -18,6 +18,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
     private var url: String? = null
     private var idProduto = 0L
 
+    private val produtoDao by lazy {
+        val db = AppDatabase.getInstance(this)
+        db.produtoDao()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -30,17 +35,29 @@ class FormularioProdutoActivity : AppCompatActivity() {
             }
         }
 
-        intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
+        carregaProduto()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        produtoDao.findOne(idProduto)?.let {
             title = "Alterar Produto"
-            idProduto = produtoCarregado.id
-
-            url = produtoCarregado.imagem
-            binding.formularioProdutosImageView.tentaCarregarImagem(produtoCarregado.imagem)
-            binding.inputTitulo.setText(produtoCarregado.titulo)
-            binding.inputDescricao.setText(produtoCarregado.descricao)
-            binding.inputValor.setText(produtoCarregado.valor.toPlainString())
+            preencheCampos(it)
         }
+    }
 
+    fun carregaProduto() {
+        idProduto = intent.getLongExtra(CHAVE_PRODUTO_ID, 0)
+    }
+
+
+    fun preencheCampos(produto: Produto) {
+        url = produto.imagem
+        binding.formularioProdutosImageView.tentaCarregarImagem(produto.imagem)
+        binding.inputTitulo.setText(produto.titulo)
+        binding.inputDescricao.setText(produto.descricao)
+        binding.inputValor.setText(produto.valor.toPlainString())
     }
 
     private fun configuraBotaoSalvar() {
@@ -52,11 +69,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
         botaoSalvar.setOnClickListener {
             val novoProduto = criaProduto()
-            if(idProduto > 0) {
-                produtoDao.update(novoProduto)
-            } else {
-                produtoDao.insert(novoProduto)
-            }
+            produtoDao.insert(novoProduto)
             finish()
         }
     }
@@ -75,6 +88,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
             BigDecimal(valorString)
         }
 
-        return Produto(id= idProduto, titulo = titulo, descricao = descricao, valor = valor, imagem = url)
+        return Produto(id = idProduto, titulo = titulo, descricao = descricao, valor = valor, imagem = url)
     }
 }

@@ -15,7 +15,7 @@ import com.example.orgs.model.Produto
 class DetalhesProdutoActivity : AppCompatActivity() {
 
     private var produto: Produto? = null
-    private var idProduto: Long? = null
+    private var idProduto: Long = 0L
 
 
     private val binding by lazy {
@@ -37,15 +37,16 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        idProduto?.let { id ->
-            produto = produtoDao.findOne(id)
+        buscaProdutoBanco()
 
-        }
+    }
+
+    private fun buscaProdutoBanco() {
+        produto = produtoDao.findOne(idProduto)
 
         produto?.let {
             preencherDadosProduto(it)
         } ?: finish()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -63,7 +64,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
             }
             R.id.menu_detalhes_produto_editar -> {
                 Intent(this, FormularioProdutoActivity::class.java).apply {
-                    putExtra(CHAVE_PRODUTO, produto)
+                    putExtra(CHAVE_PRODUTO_ID, idProduto)
                     startActivity(this)
                 }
 
@@ -73,9 +74,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun carregaProduto() {
-        intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
-            idProduto = produtoCarregado.id
-        } ?: finish()
+        idProduto = intent.getLongExtra(CHAVE_PRODUTO_ID, 0)
     }
 
     private fun preencherDadosProduto(produto: Produto) {

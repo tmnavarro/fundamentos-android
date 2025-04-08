@@ -86,8 +86,6 @@ class ListaProdutoAdpter(
 
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         val binding = ActivityProdutoItemBinding.inflate(inflater, parent, false)

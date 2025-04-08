@@ -18,8 +18,15 @@ import com.example.orgs.model.Produto
 abstract class AppDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
 
+
+
     companion object {
+
+        @Volatile
+        private lateinit var db: AppDatabase
+
         fun getInstance(context: Context): AppDatabase {
+            if (::db.isInitialized) return db
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,

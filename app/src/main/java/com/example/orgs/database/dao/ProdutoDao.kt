@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.orgs.model.Produto
@@ -19,7 +20,7 @@ interface ProdutoDao {
     @Query("SELECT * FROM Produto WHERE id = :id")
     fun findOne(id: Long): Produto?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(produto: Produto)
 
     @Insert
