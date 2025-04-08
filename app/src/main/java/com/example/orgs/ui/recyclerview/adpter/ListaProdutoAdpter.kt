@@ -3,34 +3,50 @@ package com.example.orgs.ui.recyclerview.adpter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.databinding.ActivityProdutoItemBinding
 import com.example.orgs.extensions.formataMoedaPtBr
 import com.example.orgs.model.Produto
-import java.text.NumberFormat
-import java.util.Locale
 import com.example.orgs.extensions.tentaCarregarImagem
+import android.widget.PopupMenu
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import com.example.orgs.R
 
 class ListaProdutoAdpter(
     private val context: Context,
     produtos: List<Produto> = emptyList(),
-    var acessaDetalhesProduto: (produto: Produto) -> Unit = {}
+    var acessaDetalhesProduto: (produto: Produto) -> Unit = {},
+    var deletarProduto: (produto: Produto) -> Unit = {},
+    var editarProduto: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutoAdpter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
     inner class ViewHolder(private val binding: ActivityProdutoItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
 
         private lateinit var produto: Produto
+
 
         init {
             itemView.setOnClickListener {
                 if(::produto.isInitialized) {
                     acessaDetalhesProduto(produto)
                 }
+            }
+
+            itemView.setOnLongClickListener {
+                PopupMenu(context, itemView).apply {
+                    menuInflater.inflate(
+                        R.menu.menu_detalhes_produto,
+                        menu
+                    )
+                    setOnMenuItemClickListener(this@ViewHolder)
+                }.show()
+                true
             }
         }
 
@@ -53,7 +69,24 @@ class ListaProdutoAdpter(
 
             binding.imageView.tentaCarregarImagem(produto.imagem)
         }
+
+        override fun onMenuItemClick(item: MenuItem?): Boolean {
+            return when (item?.itemId) {
+                R.id.menu_detalhes_produto_remover -> {
+                    deletarProduto(produto)
+                    true
+                }
+                R.id.menu_detalhes_produto_editar -> {
+                    editarProduto(produto)
+                    true
+                }
+                else -> true
+            }
+        }
+
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)

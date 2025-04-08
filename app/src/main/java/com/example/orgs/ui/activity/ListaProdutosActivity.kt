@@ -60,5 +60,13 @@ class ListaProdutosActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+        adapter.deletarProduto = {
+            println("DELETAR PRODUTO")
+        }
+
+        adapter.editarProduto = {
+            println("EDITAR PRODUTO")
+        }
     }
 }
